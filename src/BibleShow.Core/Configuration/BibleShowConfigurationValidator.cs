@@ -1,59 +1,99 @@
+using System;
+using BibleShow.Core.FileSystem;
 using BibleShow.Core.Exceptions;
 
-namespace BibleShow.Core.Configuration;
-
-public class BibleShowConfigurationValidator : IBibleShowConfigurationValidator
+namespace BibleShow.Core.Configuration
 {
-    public void ValidateBibleConfiguration(BibleShowConfiguration configuration)
+    public class BibleShowConfigurationValidator : IBibleShowConfigurationValidator
     {
-        if (string.IsNullOrWhiteSpace(configuration.BiblesDirectory))
+        private readonly IFileSystem _fileSystem;
+
+        public BibleShowConfigurationValidator(IFileSystem fileSystem)
         {
-            throw new BibleShowException("Bibles directory must be specified.");
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            _fileSystem = fileSystem;
         }
 
-        if (!Directory.Exists(configuration.BiblesDirectory))
+        public void ValidateConfiguration(BibleShowConfiguration configuration)
         {
-            Directory.CreateDirectory(configuration.BiblesDirectory);
+            ArgumentNullException.ThrowIfNull(configuration);
+            ValidateBibleConfiguration(configuration);
+            ValidateStorageConfiguration(configuration);
         }
 
-        if (string.IsNullOrWhiteSpace(configuration.DefaultLanguage))
+        public void ValidateBibleConfiguration(BibleShowConfiguration configuration)
         {
-            throw new BibleShowException("Default language must be specified.");
-        }
-    }
+            ArgumentNullException.ThrowIfNull(configuration);
 
-    public void ValidateStorageConfiguration(BibleShowConfiguration configuration)
-    {
-        var requiredDirectories = new[]
-        {
-            configuration.PresentationsDirectory,
-            configuration.ThemesDirectory,
-            configuration.BackupDirectory
-        };
+            var bibleConfig = configuration.BibleConfiguration 
+                ?? throw new ConfigurationValidationException("BibleConfiguration section is missing");
 
-        foreach (var directory in requiredDirectories)
-        {
-            if (string.IsNullOrWhiteSpace(directory))
+            if (string.IsNullOrEmpty(bibleConfig.DefaultLanguage))
             {
-                throw new BibleShowException($"Required directory path is not specified.");
+                throw new ConfigurationValidationException("DefaultLanguage must be specified in BibleConfiguration");
             }
 
-            if (!Directory.Exists(directory))
+            if (bibleConfig.MaxSearchResults <= 0)
             {
-                Directory.CreateDirectory(directory);
+                throw new ConfigurationValidationException("MaxSearchResults must be greater than 0 in BibleConfiguration");
             }
         }
 
-        if (configuration.EnableAutoBackup)
+        public void ValidateStorageConfiguration(BibleShowConfiguration configuration)
         {
-            if (configuration.AutoBackupIntervalHours <= 0)
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            var storageConfig = configuration.StorageConfiguration 
+                ?? throw new ConfigurationValidationException("StorageConfiguration section is missing");
+
+            if (string.IsNullOrEmpty(storageConfig.AppDataDirectory))
             {
-                throw new BibleShowException("Auto backup interval must be greater than 0 hours.");
+                throw new ConfigurationValidationException("AppDataDirectory must be specified in StorageConfiguration");
             }
 
-            if (configuration.MaxBackupCount <= 0)
+            if (storageConfig.MaxBackupCount <= 0)
             {
-                throw new BibleShowException("Maximum backup count must be greater than 0.");
+                throw new ConfigurationValidationException("MaxBackupCount must be greater than 0 in StorageConfiguration");
+            }
+
+            if (string.IsNullOrEmpty(storageConfig.BackupNameFormat))
+            {
+                throw new ConfigurationValidationException("BackupNameFormat must be specified in StorageConfiguration");
+            }
+
+            try
+            {
+                // Ensure the application data directory exists
+                _fileSystem.CreateDirectory(storageConfig.AppDataDirectory);
+
+                // Ensure required subdirectories exist
+                var requiredDirs = new[]
+                {
+                    _fileSystem.GetFullPath(storageConfig.AppDataDirectory, "bibles"),
+                    _fileSystem.GetFullPath(storageConfig.AppDataDirectory, "presentations"),
+                    _fileSystem.GetFullPath(storageConfig.AppDataDirectory, "themes"),
+                    _fileSystem.GetFullPath(storageConfig.AppDataDirectory, "backups")
+                };
+
+                foreach (var dir in requiredDirs)
+                {
+                    _fileSystem.CreateDirectory(dir);
+                }
+
+                // Validate backup directory permissions
+                var testFile = _fileSystem.GetFullPath(
+                    storageConfig.AppDataDirectory,
+                    "backups",
+                    ".test_write_permission");
+
+                _fileSystem.WriteAllTextAsync(testFile, "test").GetAwaiter().GetResult();
+                _fileSystem.DeleteFile(testFile);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigurationValidationException(
+                    "Cannot access or write to required directories. Please check permissions.",
+                    ex);
             }
         }
     }

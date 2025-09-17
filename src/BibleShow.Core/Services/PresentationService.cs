@@ -13,15 +13,19 @@ public class PresentationService : IPresentationService
     private readonly IBibleService _bibleService;
 
     public PresentationService(
-        IOptions<BibleShowConfiguration> configuration,
-        IBibleShowConfigurationValidator validator,
-        IBibleService bibleService)
-    {
-        _configuration = configuration.Value;
-        _validator = validator;
-        _bibleService = bibleService;
-        _validator.ValidateStorageConfiguration(_configuration);
-    }
+            IOptions<BibleShowConfiguration> configuration,
+            IBibleShowConfigurationValidator validator,
+            IBibleService bibleService)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+            ArgumentNullException.ThrowIfNull(validator);
+            ArgumentNullException.ThrowIfNull(bibleService);
+
+            _configuration = configuration.Value;
+            _validator = validator;
+            _bibleService = bibleService;
+            _validator.ValidateConfiguration(_configuration);
+        }
 
     public Task<IEnumerable<Presentation>> GetAllPresentationsAsync()
     {

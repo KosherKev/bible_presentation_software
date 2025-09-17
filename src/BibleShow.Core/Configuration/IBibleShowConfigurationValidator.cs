@@ -2,19 +2,29 @@ namespace BibleShow.Core.Configuration;
 
 public interface IBibleShowConfigurationValidator
 {
+    void ValidateConfiguration(BibleShowConfiguration configuration);
     void ValidateBibleConfiguration(BibleShowConfiguration configuration);
     void ValidateStorageConfiguration(BibleShowConfiguration configuration);
 }
 
 public class BibleShowConfiguration
 {
-    public required string BiblesDirectory { get; init; }
-    public required string PresentationsDirectory { get; init; }
-    public required string ThemesDirectory { get; init; }
-    public required string BackupDirectory { get; init; }
-    public required string DefaultLanguage { get; init; } = "en";
-    public required bool EnableCloudSync { get; init; }
-    public required bool EnableAutoBackup { get; init; }
-    public int AutoBackupIntervalHours { get; init; } = 24;
-    public int MaxBackupCount { get; init; } = 10;
+    public StorageConfiguration StorageConfiguration { get; set; } = new();
+    public BibleConfiguration BibleConfiguration { get; set; } = new();
+}
+
+public class StorageConfiguration
+{
+    public string AppDataDirectory { get; set; } = FileSystem.FileSystemUtilities.GetDefaultAppDataDirectory();
+    public bool EnableAutoBackup { get; set; } = true;
+    public int MaxBackupCount { get; set; } = 5;
+    public string BackupNameFormat { get; set; } = "backup_{0}";
+}
+
+public class BibleConfiguration
+{
+    public string DefaultBibleId { get; set; } = string.Empty;
+    public string DefaultLanguage { get; set; } = "en";
+    public bool EnableSearchHighlighting { get; set; } = true;
+    public int MaxSearchResults { get; set; } = 100;
 }

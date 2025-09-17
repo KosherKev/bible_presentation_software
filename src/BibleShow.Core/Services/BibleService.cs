@@ -12,13 +12,16 @@ public class BibleService : IBibleService
     private readonly IBibleShowConfigurationValidator _validator;
 
     public BibleService(
-        IOptions<BibleShowConfiguration> configuration,
-        IBibleShowConfigurationValidator validator)
-    {
-        _configuration = configuration.Value;
-        _validator = validator;
-        _validator.ValidateBibleConfiguration(_configuration);
-    }
+            IOptions<BibleShowConfiguration> configuration,
+            IBibleShowConfigurationValidator validator)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+            ArgumentNullException.ThrowIfNull(validator);
+
+            _configuration = configuration.Value;
+            _validator = validator;
+            _validator.ValidateBibleConfiguration(_configuration);
+        }
 
     public Task<IEnumerable<Bible>> GetAllBiblesAsync()
     {

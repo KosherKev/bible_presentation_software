@@ -15,6 +15,9 @@ public class ThemeService : IThemeService
         IOptions<BibleShowConfiguration> configuration,
         IBibleShowConfigurationValidator validator)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(validator);
+
         _configuration = configuration.Value;
         _validator = validator;
         _validator.ValidateStorageConfiguration(_configuration);
