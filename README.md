@@ -13,7 +13,7 @@ A cross-platform scripture presentation tool for churches and Christian organiza
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/bible_presentation_software.git
+git clone https://github.com/kosherkev/bible_presentation_software.git
 cd bible_presentation_software
 ```
 
