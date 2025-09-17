@@ -7,7 +7,11 @@
 - 1.4 Set up testing framework and infrastructure ✅
 
 ## 2.0 Core Functionality Migration 🔄
-- 2.1 Migrate core business logic to .NET 8
+- 2.1 Migrate core business logic to .NET 8 ✅
+  - Created domain models (Bible, Book, Chapter, Verse)
+  - Created presentation models (Presentation, Theme, PresentationItem)
+  - Defined core service interfaces (IBibleService, IPresentationService, IThemeService)
+  - Added domain-specific exceptions
 - 2.2 Update dependency injection and service configuration
 - 2.3 Implement cross-platform file system operations
 - 2.4 Migrate Bible text processing and search functionality
