@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace BibleShow.Core.Tests;
 
 public class UnitTest1
