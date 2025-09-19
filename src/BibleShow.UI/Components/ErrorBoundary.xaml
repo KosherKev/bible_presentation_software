@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BibleShow.UI.Components.ErrorBoundary">
+    <Grid>
+        <ContentView x:Name="ContentContainer" />
+        <VerticalStackLayout x:Name="ErrorContainer" IsVisible="False" Padding="20" Spacing="10">
+            <Image Source="error_icon.png" HeightRequest="64" WidthRequest="64" />
+            <Label Text="An error occurred" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label x:Name="ErrorMessage" FontSize="16" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" />
+            <Button x:Name="RetryButton" Text="Retry" Clicked="OnRetryClicked" HorizontalOptions="Center" Margin="0,20,0,0" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

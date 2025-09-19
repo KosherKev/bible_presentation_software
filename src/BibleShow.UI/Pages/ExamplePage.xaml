@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:BibleShow.UI.Components"
+             x:Class="BibleShow.UI.Pages.ExamplePage">
+    <Grid>
+        <components:ErrorBoundary x:Name="MainErrorBoundary">
+            <VerticalStackLayout x:Name="MainContent" Spacing="20" Padding="20">
+                <Label Text="Example Page" FontSize="24" FontAttributes="Bold" />
+                <Button x:Name="LoadItemsButton" Text="Load Items" Clicked="OnLoadItemsClicked" />
+                <Button x:Name="ErrorButton" Text="Trigger Error" Clicked="OnErrorButtonClicked" />
+                <components:ErrorBoundary x:Name="ListErrorBoundary">
+                    <CollectionView x:Name="ItemsList" ItemsSource="{Binding Items}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding}" Margin="0,5" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </components:ErrorBoundary>
+            </VerticalStackLayout>
+        </components:ErrorBoundary>
+    </Grid>
+</ContentPage>

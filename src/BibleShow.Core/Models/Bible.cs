@@ -32,4 +32,5 @@ public record Verse
     public required string Id { get; init; }
     public required int Number { get; init; }
     public required string Text { get; init; }
+    public string Reference { get; init; } = string.Empty;
 }

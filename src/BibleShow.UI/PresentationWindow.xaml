@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           x:Class="BibleShow.UI.PresentationWindow"
+           Title="BibleShow Presentation">
+
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+        <Label x:Name="VerseLabel"
+               Text="{Binding CurrentVerse}"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               FontSize="32"
+               TextColor="{AppThemeBinding Light={StaticResource Text}, Dark={StaticResource TextDark}}"
+               LineBreakMode="WordWrap"
+               HorizontalTextAlignment="Center"
+               Margin="20" />
+    </Grid>
+
+</ContentPage>

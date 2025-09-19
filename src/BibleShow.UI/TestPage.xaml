@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BibleShow.UI.TestPage"
+             Title="Test Page">
+
+    <StackLayout Padding="20" VerticalOptions="Center">
+        <Label Text="BibleShow Test Page"
+               FontSize="24"
+               HorizontalOptions="Center" />
+        <Label Text="Application is running successfully!"
+               FontSize="16"
+               HorizontalOptions="Center"
+               Margin="0,20,0,0" />
+    </StackLayout>
+
+</ContentPage>

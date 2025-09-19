@@ -1,5 +1,6 @@
-﻿using ObjCRuntime;
+using ObjCRuntime;
 using UIKit;
+using BibleShow.UI.Platforms.MacCatalyst;
 
 namespace BibleShow.UI;
 
